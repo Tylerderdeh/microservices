@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: chat
+
+  datasource:
+    flyway:
+      enabled: true
+      locations: classpath:db/migration
+      baseline-on-migrate: false
+      default-schema: public
+
+

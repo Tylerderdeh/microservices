@@ -1,0 +1,12 @@
+package kz.zk.authservice.service.impl;
+
+import kz.zk.authservice.dto.LoginRequest;
+import kz.zk.authservice.dto.RegistrationRequest;
+import kz.zk.authservice.dto.TokenResponse;
+
+public interface AuthService {
+
+    void register(RegistrationRequest request);
+
+    TokenResponse login(LoginRequest request);
+}
