@@ -1,4 +1,4 @@
-package kz.zk.authservice.service.impl;
+package kz.zk.authservice.service;
 
 import kz.zk.authservice.dto.LoginRequest;
 import kz.zk.authservice.dto.RegistrationRequest;

@@ -1,10 +1,12 @@
-package kz.zk.authservice.service;
+package kz.zk.authservice.service.impl;
 
 import jakarta.transaction.Transactional;
 import kz.zk.authservice.dto.LoginRequest;
 import kz.zk.authservice.dto.RegistrationRequest;
 import kz.zk.authservice.dto.TokenResponse;
-import kz.zk.authservice.service.impl.AuthService;
+import kz.zk.authservice.repository.UserRepository;
+import kz.zk.authservice.service.AuthService;
+import kz.zk.authservice.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

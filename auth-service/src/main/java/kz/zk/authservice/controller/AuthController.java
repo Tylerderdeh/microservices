@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import kz.zk.authservice.dto.LoginRequest;
 import kz.zk.authservice.dto.RegistrationRequest;
 import kz.zk.authservice.dto.TokenResponse;
-import kz.zk.authservice.service.impl.AuthService;
+import kz.zk.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
