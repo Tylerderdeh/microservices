@@ -27,14 +27,4 @@ public class RegistrationRequest {
         message = "{validation.password.pattern}"
     )
     private String password;
-
-    @NotBlank(message = "{validation.firstName.required}")
-    private String firstName;
-
-    @NotBlank(message = "{validation.lastName.required}")
-    private String lastName;
-
-    private String phone;
-
-    private boolean otpRegistration;
 }

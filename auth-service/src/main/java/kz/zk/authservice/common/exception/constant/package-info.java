@@ -1,0 +1,1 @@
+package kz.zk.authservice.common.exception.constant;

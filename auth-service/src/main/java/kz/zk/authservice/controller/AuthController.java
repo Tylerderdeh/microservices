@@ -1,5 +1,7 @@
 package kz.zk.authservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import kz.zk.authservice.dto.LoginRequest;
@@ -7,6 +9,7 @@ import kz.zk.authservice.dto.RegistrationRequest;
 import kz.zk.authservice.dto.TokenResponse;
 import kz.zk.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +26,11 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-//    @Operation(method = "POST", summary = "Регистрация пользователя", description = "Регистрация нового пользователя в системе")
-//    @ApiResponse(responseCode = "200", description = "Пользователь успешно зарегистрирован")
+    @Operation(method = "POST", summary = "Регистрация пользователя", description = "Регистрация нового пользователя в системе")
+    @ApiResponse(responseCode = "200", description = "Пользователь успешно зарегистрирован")
     public ResponseEntity<Void> register(@RequestBody RegistrationRequest request) {
         authService.register(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

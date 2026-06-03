@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: auth-service
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:http://localhost:8888/realms/keycloak}
+      client:
+        provider:
+          keycloak:
+            token-uri: ${CLIENT_TOKEN_URL:http://localhost:8888/realms/keycloak/protocol/openid-connect/token}
+        registration:
+          keycloak:
+            client-id: ${CLIENT_ID:auth-service}
+            client-secret: ${CLIENT_SECRET:RdPlpIOqZaYu9m6PSDMCBqdC0ta3BHds}
+            authorization-grant-type: ${CLIENT_GRANT_TYPE:client_credentials}
+
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:127.0.0.1}:${DB_PORT:5432}/${DB_NAME:jojo}
+    username: ${DB_USER:diobrando}
+    password: ${DB_PASSWORD:theworld}
+    hikari:
+      minimumIdle: ${HCP_MIN_IDL:2}
+      idleTimeout: ${HCP_IDLE_TIMEOUT:60000}
+      connectionTimeout: ${HCP_CONN_TIMEOUT:30000}
+      maxLifetime: ${HCP_MAX_LIFETIME:300000}
+      maximumPoolSize: ${HCP_MAX_POOLSIZE:16}
+      connection-test-query: SELECT 1
+      poolName: SpringBootJPAHikariCP
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+    default-schema: public
+
+keycloak:
+  auth-server-url: http://localhost:8080
+  realm: keycloak
+  client-id: auth-service
+  client-secret: RdPlpIOqZaYu9m6PSDMCBqdC0ta3BHds
+  grant-type: client_credentials
