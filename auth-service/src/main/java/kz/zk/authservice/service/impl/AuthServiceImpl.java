@@ -1,17 +1,18 @@
 package kz.zk.authservice.service.impl;
 
 import jakarta.transaction.Transactional;
+import kz.zk.authservice.common.exception.BusinessValidationException;
 import kz.zk.authservice.dto.KeycloakUser;
 import kz.zk.authservice.dto.LoginRequest;
 import kz.zk.authservice.dto.RegistrationRequest;
 import kz.zk.authservice.dto.TokenResponse;
+import kz.zk.authservice.entity.User;
 import kz.zk.authservice.repository.UserRepository;
 import kz.zk.authservice.service.AuthService;
 import kz.zk.authservice.service.KeycloakService;
 import kz.zk.authservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -26,6 +27,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final KeycloakService keycloakService;
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @Override
     public void register(RegistrationRequest request) {
@@ -51,6 +53,17 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public TokenResponse login(LoginRequest request) {
-        return null;
+        User user = userRepository.findByEmailIgnoreCaseOrUsernameIgnoreCase(request.getUsername(), request.getUsername())
+                .orElseThrow(() -> new BusinessValidationException("auth.login.failed"));
+
+        if (userService.isUserInactive(user.getKeycloakId())) {
+            throw new BusinessValidationException("user.inactive");
+        }
+
+        TokenResponse response = keycloakService.login(user.getUsername(), request.getPassword());
+
+        userService.updateLastLoginTime(user.getKeycloakId());
+
+        return response;
     }
 }

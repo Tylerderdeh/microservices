@@ -7,11 +7,14 @@ import kz.zk.authservice.entity.enums.UserStatus;
 import kz.zk.authservice.repository.UserRepository;
 import kz.zk.authservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -40,5 +43,24 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isUserInactive(UUID keycloakId) {
+        return userRepository.findByKeycloakId(keycloakId)
+                .map(user -> user.getStatus() == UserStatus.INACTIVE)
+                .orElse(false);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void updateLastLoginTime(UUID keycloakId) {
+        userRepository.findByKeycloakId(keycloakId)
+                .ifPresent(user -> {
+                    user.setLastLoginAt(Instant.now());
+                    userRepository.save(user);
+                    log.debug("Updated last login time for user: {}", user.getUsername());
+                });
     }
 }
