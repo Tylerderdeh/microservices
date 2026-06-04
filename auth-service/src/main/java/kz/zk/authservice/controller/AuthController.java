@@ -1,6 +1,8 @@
 package kz.zk.authservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import kz.zk.authservice.dto.TokenResponse;
 import kz.zk.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +38,8 @@ public class AuthController {
 
 
     @PostMapping("/login")
-//    @Operation(method = "POST", summary = "Вход пользователя", description = "Аутентификация пользователя в системе")
-//    @ApiResponse(responseCode = "200", description = "Пользователь успешно аутентифицирован", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TokenResponse.class))})
+    @Operation(method = "POST", summary = "Вход пользователя", description = "Аутентификация пользователя в системе")
+    @ApiResponse(responseCode = "200", description = "Пользователь успешно аутентифицирован", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TokenResponse.class))})
     public ResponseEntity<TokenResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         TokenResponse tokenResponse = authService.login(request);
         Cookie cookie = new Cookie("refresh_token", tokenResponse.getRefreshToken());

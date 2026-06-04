@@ -21,11 +21,12 @@ public class UtilService {
      */
     public static String getLocalizedMessage(String key, Object... args) {
         Locale locale = LocaleContextHolder.getLocale();
-        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
         try {
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
             String pattern = bundle.getString(key);
             return MessageFormat.format(pattern, args);
         } catch (Exception e) {
+            log.warn("Message not found for key '{}', locale '{}'", key, locale);
             return "???" + key + "???";
         }
     }
