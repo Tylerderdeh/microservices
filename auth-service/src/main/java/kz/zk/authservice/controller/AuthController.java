@@ -6,9 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import kz.zk.authservice.dto.LoginRequest;
-import kz.zk.authservice.dto.RegistrationRequest;
-import kz.zk.authservice.dto.TokenResponse;
+import jakarta.validation.Valid;
+import kz.zk.authservice.dto.*;
 import kz.zk.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -51,4 +50,21 @@ public class AuthController {
         tokenResponse.setRefreshToken(null);
         return ResponseEntity.ok(tokenResponse);
     }
+
+    @PostMapping("/verify-email")
+    @Operation(method = "POST", summary = "Подтверждение email", description = "Подтверждение email по токену верификации")
+    @ApiResponse(responseCode = "200", description = "Email успешно подтвержден")
+    public ResponseEntity<Void> verifyEmail(@Valid @RequestBody VerifyEmailTokenRequest request) {
+        authService.verifyEmail(request.getToken());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/resend-verification-email")
+    @Operation(method = "POST", summary = "Повторная отправка письма для подтверждения email", description = "Повторная отправка письма для подтверждения email пользователю")
+    @ApiResponse(responseCode = "200", description = "Письмо для подтверждения email успешно отправлено")
+    public ResponseEntity<Void> resendVerificationEmail(@Valid @RequestBody ResendVerificationEmailRequest request) {
+        authService.resendVerificationEmail(request.getEmail());
+        return ResponseEntity.ok().build();
+    }
+
 }

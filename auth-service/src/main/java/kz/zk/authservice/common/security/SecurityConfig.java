@@ -34,8 +34,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }
 }

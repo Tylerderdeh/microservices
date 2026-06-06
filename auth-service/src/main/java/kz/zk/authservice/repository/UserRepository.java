@@ -15,6 +15,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     void deleteByKeycloakId(UUID keycloakId);
     Optional<User> findByEmailIgnoreCaseOrUsernameIgnoreCase(String email, String username);
     boolean existsByEmailIgnoreCase(String email);
+    Optional<User> findByEmailVerificationToken(String token);
     boolean existsByUsernameIgnoreCase(String username);
 }
 

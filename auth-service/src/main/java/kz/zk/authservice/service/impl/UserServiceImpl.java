@@ -34,12 +34,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(RegistrationRequest request, String keycloakId) {
+    public void saveUser(RegistrationRequest request, String keycloakId, String verificationToken) {
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .keycloakId(UUID.fromString(keycloakId))
                 .status(UserStatus.ACTIVE)
+                .emailVerificationToken(verificationToken)
+                .emailVerificationTokenExpiry(Instant.now().plusSeconds(24 * 3600)) // токен действителен 24 часа
                 .build();
 
         userRepository.save(user);
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public void updateLastLoginTime(UUID keycloakId) {
         userRepository.findByKeycloakId(keycloakId)
                 .ifPresent(user -> {
@@ -62,5 +64,32 @@ public class UserServiceImpl implements UserService {
                     userRepository.save(user);
                     log.debug("Updated last login time for user: {}", user.getUsername());
                 });
+    }
+
+    @Override
+    @Transactional
+    public User verifyAndUpdateEmail(String token) {
+        User user = userRepository.findByEmailVerificationToken(token)
+                .orElseThrow(() -> new BusinessValidationException("auth.token.invalid"));
+
+        if (user.getEmailVerificationTokenExpiry().isBefore(Instant.now())) {
+            throw new BusinessValidationException("auth.token.expired");
+        }
+
+        user.setEmailVerificationToken(null);
+        user.setEmailVerificationTokenExpiry(null);
+        return user;
+    }
+
+    @Override
+    @Transactional
+    public User prepareResendVerification(User user) {
+        String verificationToken = UUID.randomUUID().toString();
+        Instant expiryTime = Instant.now().plusSeconds(24 * 3600);
+
+        user.setEmailVerificationToken(verificationToken);
+        user.setEmailVerificationTokenExpiry(expiryTime);
+        user.setLastVerificationEmailSentAt(Instant.now());
+        return user;
     }
 }

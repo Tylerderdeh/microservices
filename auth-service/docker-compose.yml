@@ -35,5 +35,12 @@ services:
       postgres:
         condition: service_healthy
 
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+
 volumes:
   postgres_data:

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f8f9fa;
+        }
+        .content {
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Добро пожаловать!</h1>
+        </div>
+        <div class="content">
+            <p>Спасибо за регистрацию. Для завершения регистрации, пожалуйста, подтвердите ваш email, нажав на кнопку ниже:</p>
+            
+            <div style="text-align: center;">
+                <a href="{{verificationUrl}}" class="button">Подтвердить Email</a>
+            </div>
+
+            <p>Если кнопка выше не работает, вы можете скопировать и вставить следующую ссылку в ваш браузер:</p>
+            <p style="word-break: break-all;">{{verificationUrl}}</p>
+
+            <p>Эта ссылка действительна в течение 24 часов по соображениям безопасности.</p>
+
+            <p>Если вы не создавали учетную запись, пожалуйста, проигнорируйте это письмо.</p>
+        </div>
+        <div class="footer">
+            <p>Это автоматическое сообщение, пожалуйста, не отвечайте на это письмо.</p>
+        </div>
+    </div>
+</body>
+</html> 

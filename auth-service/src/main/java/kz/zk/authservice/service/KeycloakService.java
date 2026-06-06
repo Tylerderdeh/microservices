@@ -7,4 +7,6 @@ public interface KeycloakService {
         String createUser(KeycloakUser user);
         void deleteUser(String keycloakId);
         TokenResponse login(String username, String password);
+        void verifyEmail(String string);
+        boolean isEmailVerified(String string);
 }

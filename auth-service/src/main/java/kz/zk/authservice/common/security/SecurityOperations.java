@@ -10,18 +10,15 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Slf4j
-@Component
 public class SecurityOperations {
 
     public static Optional<String> getUserName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof JwtAuthenticationToken) {
-            if (authentication != null) {
                 Jwt credentials = (Jwt) authentication.getCredentials();
                 if (credentials != null) {
                     return Optional.of(credentials.getClaimAsString("preferred_username"));
                 }
-            }
         }
         return Optional.empty();
     }

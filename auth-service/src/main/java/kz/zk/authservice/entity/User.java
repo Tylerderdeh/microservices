@@ -37,6 +37,12 @@ public class User extends AbstractAuditableEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    private String emailVerificationToken;
+
+    private Instant emailVerificationTokenExpiry;
+
+    private Instant lastVerificationEmailSentAt;
+
     // Активность — тоже сам
     private Instant lastLoginAt;
 

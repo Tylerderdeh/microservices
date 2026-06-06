@@ -9,6 +9,7 @@ import kz.zk.authservice.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.ErrorRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
@@ -121,6 +122,31 @@ public class KeycloakServiceImpl implements KeycloakService {
         } catch (Exception e) {
             log.error("Unexpected error during login for user {}: {}", username, e.getMessage(), e);
             throw new BusinessValidationException("auth.login.service_error");
+        }
+    }
+
+    @Override
+    public void verifyEmail(String keycloakId) {
+        try {
+            UserResource userResource = keycloak.realm(realm).users().get(keycloakId);
+            UserRepresentation userRep = userResource.toRepresentation();
+            userRep.setEmailVerified(true);
+            userResource.update(userRep);
+        } catch (Exception e) {
+            log.error("Error verifying email in Keycloak: {}", e.getMessage(), e);
+            throw new BusinessValidationException("keycloak.user.update.error");
+        }
+    }
+
+    @Override
+    public boolean isEmailVerified(String string) {
+        try {
+            UserResource userResource = keycloak.realm(realm).users().get(string);
+            UserRepresentation representation = userResource.toRepresentation();
+            return representation.isEmailVerified();
+        } catch (Exception e) {
+            log.error("Error checking email in Keycloak: {}", e.getMessage(), e);
+            throw new BusinessValidationException("keycloak.user.update.error");
         }
     }
 

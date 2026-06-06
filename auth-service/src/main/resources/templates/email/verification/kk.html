@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Растау</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #f8f9fa;
+        }
+        .content {
+            padding: 20px;
+            background-color: #ffffff;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Қош келдіңіз!</h1>
+        </div>
+        <div class="content">
+            <p>Тіркелгеніңіз үшін рахмет. Тіркелуді аяқтау үшін төмендегі кнопканы басу арқылы электрондық поштаңызды растаңыз:</p>
+            
+            <div style="text-align: center;">
+                <a href="{{verificationUrl}}" class="button">Email Растау</a>
+            </div>
+
+            <p>Жоғарыдағы кнопка жұмыс істемесе, келесі сілтемені браузеріңізге көшіріп қоюға болады:</p>
+            <p style="word-break: break-all;">{{verificationUrl}}</p>
+
+            <p>Қауіпсіздік мақсатында бұл сілтеме 24 сағат ішінде жарамды болады.</p>
+
+            <p>Егер сіз тіркелгі жасамаған болсаңыз, осы хатты елемеңіз.</p>
+        </div>
+        <div class="footer">
+            <p>Бұл автоматты хат, осы хатқа жауап бермеңіз.</p>
+        </div>
+    </div>
+</body>
+</html> 
