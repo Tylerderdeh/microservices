@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import kz.zk.authservice.dto.*;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
 
 @Validated
 @RestController
@@ -67,4 +70,29 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/refresh")
+    @Operation(method = "POST", summary = "Обновление токена доступа", description = "Обновление JWT токена доступа")
+    @ApiResponse(responseCode = "200", description = "Токен доступа успешно обновлен", content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TokenResponse.class))})
+    public ResponseEntity<TokenResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+        if (request == null || request.getCookies() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String refreshToken = Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals("refresh_token"))
+                .findFirst()
+                .map(Cookie::getValue)
+                .orElse(null);
+        if (refreshToken == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        TokenResponse tokenResponse = authService.refreshToken(refreshToken);
+        Cookie cookie = new Cookie("refresh_token", tokenResponse.getRefreshToken());
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(24 * 60 * 60);
+        response.addCookie(cookie);
+        tokenResponse.setRefreshToken(null);
+        return ResponseEntity.ok(tokenResponse);
+    }
 }

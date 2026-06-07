@@ -14,8 +14,11 @@ import kz.zk.authservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Instant;
@@ -106,5 +109,10 @@ public class AuthServiceImpl implements AuthService {
 
         emailService.sendVerificationEmail(user.getEmail(), user.getEmailVerificationToken(), locale);
         log.info("Resent verification email to: {}", email);
+    }
+
+    @Override
+    public TokenResponse refreshToken(String refreshToken) {
+        return keycloakService.refreshToken(refreshToken);
     }
 }

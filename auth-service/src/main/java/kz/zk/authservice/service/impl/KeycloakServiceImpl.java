@@ -150,6 +150,29 @@ public class KeycloakServiceImpl implements KeycloakService {
         }
     }
 
+    @Override
+    public TokenResponse refreshToken(String refreshToken) {
+
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("grant_type", "refresh_token");
+        formData.add("client_id", frontClientId);
+        formData.add("client_secret", frontClientSecret);
+        formData.add("refresh_token", refreshToken);
+
+        String tokenUri = authServerUrl + "/realms/" + realm + "/protocol/openid-connect/token";
+        try {
+            return restClient.post()
+                    .uri(tokenUri)
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(formData)
+                    .retrieve()
+                    .body(TokenResponse.class);
+        } catch (Exception e) {
+            log.error("Token refresh failed: {}", e.getMessage());
+            throw new BusinessValidationException("auth.refresh.failed");
+        }
+    }
+
     private void handleLoginError(HttpClientErrorException ex, String username) {
         String responseBody = ex.getResponseBodyAsString();
         log.error("Login failed for user {}: status={}, body={}", username, ex.getStatusCode(), responseBody);
