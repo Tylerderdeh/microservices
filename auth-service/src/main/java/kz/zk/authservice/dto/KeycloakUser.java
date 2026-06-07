@@ -16,6 +16,8 @@ public class KeycloakUser {
     private String id;
     private String username;
     private String email;
+    private String firstName;
+    private String lastName;
     private boolean enabled;
     private boolean emailVerified;
     private List<String> realmRoles;
@@ -25,6 +27,8 @@ public class KeycloakUser {
 
     public org.keycloak.representations.idm.UserRepresentation toUserRepresentation() {
         org.keycloak.representations.idm.UserRepresentation userRep = new org.keycloak.representations.idm.UserRepresentation();
+        userRep.setFirstName(firstName);
+        userRep.setLastName(lastName);
         userRep.setUsername(username);
         userRep.setEmail(email);
         userRep.setEnabled(enabled);

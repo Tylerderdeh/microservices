@@ -43,6 +43,8 @@ public class AuthServiceImpl implements AuthService {
                 .password(request.getPassword())
                 .enabled(true)
                 .emailVerified(false)
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .realmRoles(List.of("user"))
                 .build());
 

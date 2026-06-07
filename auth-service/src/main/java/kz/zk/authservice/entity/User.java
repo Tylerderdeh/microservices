@@ -34,6 +34,12 @@ public class User extends AbstractAuditableEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 

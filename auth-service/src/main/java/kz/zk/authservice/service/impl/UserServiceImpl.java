@@ -38,6 +38,8 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .keycloakId(UUID.fromString(keycloakId))
                 .status(UserStatus.ACTIVE)
                 .emailVerificationToken(verificationToken)
