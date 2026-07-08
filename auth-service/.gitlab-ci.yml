@@ -1,0 +1,37 @@
+name: Java CI/CD Pipeline
+
+# 1. Триггер: запускать робота только при пуше в ветку main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    # Запускаем пайплайн на чистой виртуальной машине Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # Шаг 1: Скачиваем код вашего репозитория внутрь виртуалки
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # Шаг 2: Устанавливаем Java (например, 21 или 26, смотря какая у вас)
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '26' # Укажите вашу версию Java
+          cache: 'gradle'    # Кэшируем зависимости, чтобы сборка шла быстрее
+
+      # Шаг 3: Даем права на запуск gradlew (вспоминаем наши уроки Linux!)
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Шаг 4: Сборка jar-ника и запуск тестов
+      - name: Build with Gradle
+        run: ./gradlew build -x test # Флаг -x test временно отключает тесты, если у вас еще нет написанных тестов
+
+      # Шаг 5: Собираем Docker-образ локально на виртуалке GitHub
+      - name: Build Docker Image
+        run: docker build -t mokujin7/auth-service:latest .
+        # Вместо 'my-docker-username' в будущем будет ваш логин на Docker Hub
