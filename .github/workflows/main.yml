@@ -24,8 +24,9 @@ jobs:
       working-directory: auth-service # Указываем роботу зайти в папку сервиса
 
     - name: Build with Gradle
-      run: ./gradlew build -x test
-      working-directory: auth-service # И здесь тоже заходим в папку сервиса
+        # Мы явно говорим Gradle использовать установленную Java для компиляции и отключаем проверку тулчейна флагом -Porg.gradle.java.toolchain.accommodate=true или просто через системную переменную
+      run: ./gradlew build -x test -Dorg.gradle.java.home="${{ steps.setup-java-26.outputs.path }}"
+      working-directory: auth-service
 
     - name: Build Docker Image
       run: docker build -t my-docker-username/auth-service:latest .
