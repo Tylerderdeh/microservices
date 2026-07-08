@@ -1,0 +1,32 @@
+name: Java CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21' # Поставьте вашу версию (17, 21, 26)
+        cache: 'gradle'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      working-directory: auth-service # Указываем роботу зайти в папку сервиса
+
+    - name: Build with Gradle
+      run: ./gradlew build -x test
+      working-directory: auth-service # И здесь тоже заходим в папку сервиса
+
+    - name: Build Docker Image
+      run: docker build -t my-docker-username/auth-service:latest .
+      working-directory: auth-service # И собираем Docker внутри папки сервиса
